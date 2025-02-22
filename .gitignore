@@ -14,5 +14,6 @@ tests/**/*.gch
 # CMake build
 tests/*/build/
 
-# Python cache
+# Python cache (+ mypy)
 __pycache__/
+.mypy_cache/
