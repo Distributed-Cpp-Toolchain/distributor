@@ -4,5 +4,15 @@ FOCtests/
 # C++ Object files
 tests/**/*.o
 
+# C++ executable files
+tests/**/*.exe
+tests/**/*.out
+
+# Other GCC files
+tests/**/*.gch
+
+# CMake build
+tests/*/build/
+
 # Python cache
 __pycache__/
