@@ -88,7 +88,7 @@ class RemoveDirectory(Action):
         shutil.rmtree(self.path)
 
 
-# ------------------------------------------------- Process operations -------------------------------------------------
+# --------------------------------------------- General process operations ---------------------------------------------
 
 @dataclass
 class RunProcess(Action):
