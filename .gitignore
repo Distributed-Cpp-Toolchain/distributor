@@ -3,3 +3,6 @@ FOCtests/
 
 # C++ Object files
 tests/**/*.o
+
+# Python cache
+__pycache__/
