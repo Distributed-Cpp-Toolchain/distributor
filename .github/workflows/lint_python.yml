@@ -1,0 +1,35 @@
+name: Python code linting
+
+on:
+  push:
+    paths:
+      - '**.py'
+  pull_request:
+    paths:
+      - '**.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint Python code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+          cache: pip
+          cache-dependency-path: .github/flake8.requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r ".github/flake8.requirements.txt"
+
+      - name: Lint with flake8
+        run: flake8 --show-source --statistics
