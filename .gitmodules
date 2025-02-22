@@ -1,4 +1,4 @@
-[submodule "test/linux/linux"]
-	path = test/linux/linux
+[submodule "tests/linux/linux"]
+	path = tests/linux/linux
 	url = git@github.com:torvalds/linux.git
 	branch = master

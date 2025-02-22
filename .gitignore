@@ -2,4 +2,4 @@
 FOCtests/
 
 # C++ Object files
-test/**/*.o
+tests/**/*.o
