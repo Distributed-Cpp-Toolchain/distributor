@@ -1,2 +1,5 @@
 # FOCtests
 FOCtests/
+
+# C++ Object files
+test/**/*.o
