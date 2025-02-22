@@ -92,7 +92,7 @@ class RemoveDirectory(Action):
 
 @dataclass
 class RunProcess(Action):
-    command: str
+    command: str | list[str]
     working_directory: str = '.'
 
     def execute(self):
