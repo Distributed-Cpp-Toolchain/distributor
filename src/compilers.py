@@ -1,6 +1,8 @@
+from dataclasses import dataclass, field
+from abc import ABC, abstractmethod
+from typing import Iterator
 import sys
 import re
-from abc import ABC, abstractmethod
 
 if __name__ == '__main__':
     sys.path.append('../')
@@ -15,7 +17,7 @@ class Compiler(Action, ABC):
 
     def __init__(self, command: list[str]):
         self.executable = command[0]
-        self.arguments = command[1:]
+        self.arguments = CompilerArguments(command[1:])
 
     def is_valid(self):
         try:
@@ -37,6 +39,56 @@ class Compiler(Action, ABC):
     def execute(self):
         return RunProcess([self.executable, *self.arguments]).execute()
 
+
+@dataclass
+class CompilerArguments:
+    arguments: list[str]
+    source_files: list[str] = field(default_factory=list)
+    output_files: list[str] = field(default_factory=list)
+    include_dirs: list[str] = field(default_factory=list)
+    defines: list[str] = field(default_factory=list)
+    options: list[str] = field(default_factory=list)
+    flags: list[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        self._parse_arguments()
+
+    def _parse_arguments(self):
+        it = iter(self.arguments)
+
+        for arg in it:
+            if arg.endswith(('.cpp', '.c', '.cc', '.cxx', '.h', '.hpp')):
+                self.source_files.append(arg)
+
+            elif arg in ('-o', '--output'):
+                self.output_files.append(next(it, ''))
+
+            elif arg.startswith('-I'):
+                self.include_dirs.append(arg[2:] if len(arg) > 2 else next(it, ''))
+
+            elif arg.startswith('-D'):
+                self.defines.append(arg[2:] if len(arg) > 2 else next(it, ''))
+
+            elif arg in ('-c', '-Wall', '-Wextra', '-Werror', '-fPIC') or arg.startswith('-std='):
+                self.flags.append(arg)
+
+            elif arg.startswith('-M') or arg in ('-MD', '-MT', '-MF'):
+                self.options.append(arg)
+                if arg in ('-MT', '-MF'):
+                    self.options.append(next(it, ''))
+
+            elif arg.startswith('-Xclang'):
+                self.options.append(arg)
+                self.options.append(next(it, ''))
+
+            else:
+                unsupported(f'Unsupported compiler argument: {arg}')
+
+    def __iter__(self) -> Iterator[str]:
+        return iter(self.arguments)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 class Clang(Compiler):
     name = 'Clang'

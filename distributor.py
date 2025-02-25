@@ -16,7 +16,7 @@ def run(command: list[str]):
     if sum(is_compiler) == 1:
         compiler_obj = compiler_objs[is_compiler.index(True)]
 
-        print(f'Executing {compiler_obj.name} command "{compiler_obj.executable} {" ".join(compiler_obj.arguments)}"')
+        print(f'Executing {compiler_obj.name} on {compiler_obj.arguments.source_files}')
         Task(compiler_obj).execute()
 
     else:
