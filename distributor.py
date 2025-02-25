@@ -1,7 +1,6 @@
 import sys
 
-from src.compilers.Clang import Clang
-from src.compilers.GCC import GCC
+from src.compilers import Clang, GCC
 from src.utils import unsupported
 from src.Task import Task
 from src import Actions
