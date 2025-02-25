@@ -8,11 +8,11 @@ from src.Actions import Action, RunProcess
 from src.utils import unsupported
 
 
-GCC_VERSION_REGEX = r'g(?:cc|\+\+).+?(\d+\.\d+\.\d+)'
+CLANG_VERSION_REGEX = r'.*clang(?:\+\+)?\s*version\s*(\d+\.\d+\.\d+).*'
 
 
-class GCC(Action):
-    name = 'GCC'
+class Clang(Action):
+    name = 'Clang'
 
     def __init__(self, command: list[str]):
         self.executable = command[0]
@@ -27,8 +27,8 @@ class GCC(Action):
 
     def get_version(self) -> str:
         output, error = RunProcess([self.executable, '--version']).execute()
-        match = re.fullmatch(GCC_VERSION_REGEX, output.splitlines()[0], re.IGNORECASE)
-        assert not error and match, unsupported(f'gcc --version:\n{output}\n{error}')
+        match = re.fullmatch(CLANG_VERSION_REGEX, output.splitlines()[0], re.IGNORECASE)
+        assert not error and match, unsupported(f'clang --version:\n{output}\n{error}')
         return match.group(1)
 
     def get_dependencies(self):
